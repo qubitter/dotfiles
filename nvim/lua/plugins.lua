@@ -1,4 +1,17 @@
 return {
+	  {
+    'morhetz/gruvbox',
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      -- load the colorscheme here
+      vim.cmd([[
+      set background=dark
+      colorscheme gruvbox
+      ]])
+    end,
+  },
+
 	{
 		"Shougo/deoplete.nvim",
 		config = function()
@@ -47,7 +60,7 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require'nvim-treesitter.configs'.setup {
-				  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "regex", "bash", "markdown", "markdown_inline"},
+				  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "regex", "bash", "markdown", "markdown_inline", "lua"},
 				  highlight = {
 					  enable = true,
 					  additional_vim_regex_highlighting = false

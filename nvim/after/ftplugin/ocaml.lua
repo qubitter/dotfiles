@@ -18,11 +18,5 @@ vim.cmd('set rtp^="/Users/charliebershatsky/.opam/4.14.1/share/ocp-indent/vim"')
 
 vim.cmd('let g:merlin=1')
 
-
-
-vim.cmd([[
-	call deoplete#custom#option('ignore_sources.ocaml', ['buffer', 'around', 'member', 'tag'])
-	let g:deoplete#omni#input_patterns.ocaml = '[^. *\\t]\\.\\w*\\|\\h\\w*|#']])
-
 vim.cmd("let g:syntastic_ocaml_checkers = ['merlin']")
 vim.cmd('setlocal tabstop=2')

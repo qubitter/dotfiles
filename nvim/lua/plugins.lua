@@ -1,33 +1,51 @@
 return {
-	  {
-    'morhetz/gruvbox',
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
-    config = function()
-      -- load the colorscheme here
-      vim.cmd([[
-      set background=dark
-      colorscheme gruvbox
-      ]])
-    end,
-  },
+	{
+   		'morhetz/gruvbox',
+   		lazy = false, -- make sure we load this during startup if it is your main colorscheme
+  	 	priority = 1000, -- make sure to load this before all the other start plugins
+  	 	config = function()
+  	 	   -- load the colorscheme here
+  	 	   vim.cmd([[
+  	 	  	 set background=dark
+  	 	   	colorscheme gruvbox
+  	 	   ]])
+		end,
+  	},
 
 	{
-		"Shougo/deoplete.nvim",
+		"hrsh7th/nvim-cmp",
+		dependencies = {
+			"saadparwaiz1/cmp_luasnip",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-path", -- note that an async version is available
+			"hrsh7th/cmp-cmdline",
+			"tamago324/cmp-zsh",
+			"micangl/cmp-vimtex",
+			"hrsh7th/cmp-nvim-lua",
+			"ray-x/cmp-treesitter",
+		},
 		config = function()
-			vim.cmd([[
-				if !exists('g:deoplete#omni_patterns')
-     					let g:deoplete#omni#input_patterns = {}
-    				endif
-				let g:deoplete#enable_at_startup = 1
+			local cmp = require'cmp'
+			expand = function(args)
+				require('luasnip').lsp_expand(args.body)
+			end
+			window = cmp.config.window.bordered()
+			sources = cmp.config.sources({
+				{ name = "nvim_lsp" },
+				{ name = "luasnip" },
+				{ name = "buffer" },
+				{ name = "path" }}),
+			cmp.setup.cmdline(':', {
+    				mapping = cmp.mapping.preset.cmdline(),
+    				sources = cmp.config.sources({
+      					{ name = 'path' }
+   				 }, {
+     					 { name = 'cmdline' }
+    				})
+  			})
+		end
 
-				let g:deoplete#complete_method = "complete"
-
-				call deoplete#custom#option('ignore_sources', {})
-
-				call deoplete#custom#option('auto_complete_delay', 0)
-			]])
-		end,
 	},
 	{
 		"vim-syntastic/syntastic",
@@ -39,7 +57,7 @@ return {
     	},
 	{
 		'folke/noice.nvim',
-		dependencies = { 'MunifTanjim/nui.nvim', 'rcarriga/nvim-notify'}
+		dependencies = { 'MunifTanjim/nui.nvim', 'rcarriga/nvim-notify' }
 	},
 	{
 		'stevearc/dressing.nvim',
@@ -69,5 +87,29 @@ return {
 			  }
 			  require("nvim-treesitter.install").prefer_git = true
 		  end
+	},
+
+	{
+		"neovim/nvim-lspconfig",
+		config = function()
+			local lspconfig = require('lspconfig')
+       			local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+        		lspconfig.lua_ls.setup({
+           			capabilities = lsp_capabilities,
+        		})
+			
+			lspconfig.rust_analyzer.setup {}
+
+			lspconfig.ocamllsp.setup {}
+
+			lspconfig.pyright.setup {}
+
+			lspconfig.bashls.setup {}
+
+			lspconfig.clangd.setup {}
+
+		
+		end
 	}
 }

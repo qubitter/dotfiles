@@ -48,10 +48,6 @@ return {
 
 	},
 	{
-		"vim-syntastic/syntastic",
-	},
-
-	{
                 'nvim-telescope/telescope.nvim', tag = '0.1.5',
                 dependencies = { 'nvim-lua/plenary.nvim' }
     	},
@@ -78,12 +74,19 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require'nvim-treesitter.configs'.setup {
-				  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "regex", "bash", "markdown", "markdown_inline", "lua"},
-				  highlight = {
-					  enable = true,
-					  additional_vim_regex_highlighting = false
-				  },
-				    indent = {enable = true}
+				ensure_installed = { "regex", "bash", "markdown", "markdown_inline", "lua"},
+				highlight = {
+					enable = true,
+					additional_vim_regex_highlighting = false
+				},
+				indent = {enable = true},
+				disable = function(lang, buf)
+					local max_filesize = 10 * 1024 -- 100 KB
+        				local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        				if ok and stats and stats.size > max_filesize then
+						return true
+        				end
+    				end,
 			  }
 			  require("nvim-treesitter.install").prefer_git = true
 		  end
@@ -101,7 +104,7 @@ return {
 			
 			lspconfig.rust_analyzer.setup {}
 
-			lspconfig.ocamllsp.setup {}
+		--	lspconfig.ocamllsp.setup {}
 
 			lspconfig.pyright.setup {}
 
@@ -111,5 +114,12 @@ return {
 
 		
 		end
+	},
+	{
+		"L3MON4D3/LuaSnip",
+		-- follow latest release.
+		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+		-- install jsregexp (optional!).
+		build = "make install_jsregexp"
 	}
 }

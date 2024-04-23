@@ -1,6 +1,7 @@
 {
     // The name of the Zed theme to use for the UI
-    "theme": "One Dark",
+    "base_keymap": "Atom",
+    "theme": "Andromeda",
     // The name of a font to use for rendering text in the editor
     "buffer_font_family": "Zed Mono",
     // The default font size for text in the editor
@@ -9,7 +10,7 @@
     // which gives the same size as all other panes.
     "active_pane_magnification": 1.0,
     // Whether to enable vim modes and key bindings
-    "vim_mode": false,
+    "vim_mode": true,
     // Whether to show the informational hover box when moving the mouse
     // over symbols in the editor.
     "hover_popover_enabled": true,
